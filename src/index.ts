@@ -16,17 +16,13 @@ const start = async () => {
 
     wsServer.on('connection', (socket) => {
         socket.on('message', async message => {
-
             const requestInput = JSON.parse(message.toString());
-
-            let found = ''
-
-            await crawlWeb(`${config.wikiUrl}/wiki/${requestInput.from}`, `${config.wikiUrl}/wiki/${requestInput.to}`, uuid.v4(), socket, found)
+            await crawlWeb(`${config.wikiUrl}/wiki/${requestInput.from}`, `${config.wikiUrl}/wiki/${requestInput.to}`, uuid.v4(), socket, '', 0, 0)
             socket.close()
         })
     })
 
-    const server = app.listen(3000, () => {
+    const server = app.listen(6969, () => {
         console.log('listening')
     });
 
