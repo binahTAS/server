@@ -3,6 +3,7 @@ import {Server} from 'ws'
 import {crawlWeb} from "../../crawler/src/net/Scraper";
 import config from '../../crawler/config.json'
 import {doConn} from "../../crawler/src/etc/Database";
+import * as uuid from 'uuid';
 
 const app = express()
 
@@ -15,8 +16,12 @@ const start = async () => {
 
     wsServer.on('connection', (socket) => {
         socket.on('message', async message => {
+
             const requestInput = JSON.parse(message.toString());
-            await crawlWeb(`${config.wikiUrl}/wiki/${requestInput.from}`, `${config.wikiUrl}/wiki/${requestInput.to}`, 5, socket)
+
+            let found = ''
+
+            await crawlWeb(`${config.wikiUrl}/wiki/${requestInput.from}`, `${config.wikiUrl}/wiki/${requestInput.to}`, uuid.v4(), socket, found)
             socket.close()
         })
     })
@@ -34,5 +39,5 @@ const start = async () => {
 }
 
 start().then(() => {
-    console.log('Exiting...')
+    console.log('exiting...')
 })
